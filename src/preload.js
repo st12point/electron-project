@@ -2,11 +2,16 @@ const { contextBridge, ipcRenderer } = require("electron");
 
 contextBridge.exposeInMainWorld("api", {
   invoke: async () => {
-    const data = await ipcRenderer
-      .invoke("invoke-test", "try to connect to database")
-      .then(result => {
-        console.log("invoke success", result);
-      });
+    try {
+      const data = await ipcRenderer
+        .invoke("invoke-test", "try to connect to database:preload.js")
+        .then(v => {
+          return JSON.stringify(v);
+        });
+      return data;
+    } catch (error) {
+      console.log(error);
+    }
   },
   send: () => {
     ipcRenderer.send("send-test", "to main from send");

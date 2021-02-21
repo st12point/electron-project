@@ -1,26 +1,31 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png" />
-    <HelloWorld msg="Welcome to Your Vue.js App" />
     <button id="invoke">invoke</button>
     <button id="send">send</button>
+    <p v-for="user in database" :key="user.id">{{ user }}</p>
   </div>
 </template>
 
 <script>
-import HelloWorld from "./components/HelloWorld.vue";
 export default {
   name: "App",
-  components: {
-    HelloWorld
+  components: {},
+  data() {
+    return {
+      database: {}
+    };
   },
   mounted() {
     const invoke = document.getElementById("invoke");
     invoke.addEventListener(
       "click",
       () => {
-        window.api.invoke();
-        console.log("click:invoke in Vue");
+        console.log("Clicked in Vue");
+        window.api.invoke().then(v => {
+          this.database = JSON.parse(v);
+        });
+        // this.database = result;
+        console.log("in Vue:", this.database);
       },
       false
     );
@@ -36,14 +41,3 @@ export default {
   }
 };
 </script>
-
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>

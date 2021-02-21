@@ -3,10 +3,9 @@
 import { app, protocol, BrowserWindow, ipcMain } from "electron";
 import { createProtocol } from "vue-cli-plugin-electron-builder/lib";
 import installExtension, { VUEJS_DEVTOOLS } from "electron-devtools-installer";
-import { getConnection } from "./database";
 const path = require("path");
 const isDevelopment = process.env.NODE_ENV !== "production";
-require("./database");
+const database = require("./database");
 // Scheme must be registered before the app is ready
 protocol.registerSchemesAsPrivileged([
   { scheme: "app", privileges: { secure: true, standard: true } }
@@ -83,8 +82,8 @@ if (isDevelopment) {
 }
 
 ipcMain.handle("invoke-test", async (e, arg) => {
-  console.log(arg);
-  const result = await getConnection();
+  console.log(arg, ":background.js");
+  const result = await database();
   return result;
 });
 
