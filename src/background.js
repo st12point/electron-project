@@ -5,7 +5,9 @@ import { createProtocol } from "vue-cli-plugin-electron-builder/lib";
 import installExtension, { VUEJS_DEVTOOLS } from "electron-devtools-installer";
 const path = require("path");
 const isDevelopment = process.env.NODE_ENV !== "production";
-const database = require("./database");
+const db = require("../models");
+
+// const modelUser = require("./models/user");
 // Scheme must be registered before the app is ready
 protocol.registerSchemesAsPrivileged([
   { scheme: "app", privileges: { secure: true, standard: true } }
@@ -64,6 +66,8 @@ app.on("ready", async () => {
     }
   }
   createWindow();
+  console.log(__dirname);
+  console.log(app.getAppPath());
 });
 
 // Exit cleanly on request from parent process in development mode.
@@ -82,9 +86,13 @@ if (isDevelopment) {
 }
 
 ipcMain.handle("invoke-test", async (e, arg) => {
-  console.log(arg, ":background.js");
-  const result = await database();
-  return result;
+  console.log(e.processId, arg, ":background.js");
+  // const User = await modelUser();
+  // const result = User.findAll().then(users => {
+  //   return users;
+  // });
+  // return result;
+  return "return something from ipcHandle";
 });
 
 ipcMain.on("send-test", (e, arg) => {

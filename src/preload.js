@@ -6,7 +6,7 @@ contextBridge.exposeInMainWorld("api", {
       const data = await ipcRenderer
         .invoke("invoke-test", "try to connect to database:preload.js")
         .then(v => {
-          return JSON.stringify(v);
+          return v;
         });
       return data;
     } catch (error) {
